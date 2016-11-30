@@ -668,8 +668,8 @@
 				$input.trigger('pick.xdsoft');
 			})
 
-		function manageData(){
-			if ($input.val()!=currentValue){
+		function manageData(force){
+			if (force || $input.val()!=currentValue){
 				currentValue = $input.val();
 			} else {
 				return;
@@ -736,15 +736,17 @@
 					return true;
 				case TAB:
 				return true;
-				case ENTER:
-					if (iOpen) {
-						$input.trigger('pick.xdsoft');
-						event.preventDefault();
-						return false;
-					} else {
-						return true;
-					}
 				break;
+	      case ENTER:
+	        if (iOpen) {
+	          $input.trigger('close.xdsoft');
+	          event.preventDefault();
+	           return false;
+	        } else {
+						return true;
+	        }
+	      break;
+
 				case ESC:
 					$input
 						.val(currentValue)
@@ -795,14 +797,15 @@
 			.on('pick.xdsoft', function( event,_value ){
 
 				$input
-					.trigger('timepick.xdsoft',_value)
+					.trigger('timepick.xdsoft',_value);
+					
+				setTimeout(function(){
+					manageData();
+				},1);
+				
+				manageData();
 				
 				currentSelect = currentValue = $input.val();
-				
-				$input
-					.trigger('close.xdsoft');
-				
-				//currentInput = false;
 				
 				active = $dropdown.find('div.active').eq(0);
 							
@@ -810,6 +813,7 @@
 					active = $dropdown.children().first();
 					
 				$input.trigger('selected.xdsoft',[getItem(active,dataset)]);
+				
 			})
 			.on('timepick.xdsoft', function( event,_value ){
 				active = $dropdown.find('div.active');
