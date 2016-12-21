@@ -738,13 +738,8 @@
 				return true;
 				break;
 	      case ENTER:
-	        if (iOpen) {
-	          $input.trigger('close.xdsoft');
-	          event.preventDefault();
-	           return false;
-	        } else {
-						return true;
-	        }
+		$input.trigger('close.xdsoft');
+		return true;
 	      break;
 
 				case ESC:
